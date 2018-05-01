@@ -71,12 +71,11 @@ import Foreign.Storable         (Storable, poke, sizeOf)
 import Foreign.Ptr              (Ptr, plusPtr)
 import Foreign.ForeignPtr       (ForeignPtr, withForeignPtr)
 import System.IO.Unsafe         (unsafePerformIO)
-import Data.ByteString.Internal (inlinePerformIO,c2w)
+import Data.ByteString.Internal (c2w)
 
 import Data.Bits
 import Data.Word
 import Data.Int
-import Data.Monoid hiding ((<>))
 import Data.Semigroup
 
 ------------------------------------------------------------------------
@@ -192,7 +191,7 @@ defaultSize = 32 * k - overhead
 
 -- | Sequence an IO operation on the buffer
 unsafeLiftIO :: (Buffer -> IO Buffer) -> Builder
-unsafeLiftIO f =  Builder $ \ k buf -> inlinePerformIO $ do
+unsafeLiftIO f =  Builder $ \ k buf -> unsafePerformIO $ do
     buf' <- f buf
     return (k buf')
 

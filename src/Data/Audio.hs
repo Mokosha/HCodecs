@@ -42,7 +42,7 @@ import System.IO.Unsafe
 import Data.Array.Unboxed
 import Data.Word
 import Data.Int
-import Data.Monoid
+import Data.Monoid (mconcat)
 
 type Sample = Double
 type SampleData a = UArray Int a

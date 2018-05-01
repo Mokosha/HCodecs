@@ -50,7 +50,7 @@ import Data.Array.IArray
 import Data.List
 
 import Test.QuickCheck
-import Data.Monoid
+import Data.Monoid (mconcat)
 import Control.Applicative
 import Control.Monad
 

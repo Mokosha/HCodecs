@@ -74,7 +74,7 @@ import Data.Word
 import Data.Bits
 import Data.Maybe
 import Data.List
-import Data.Monoid
+import Data.Monoid (mempty, mconcat, mappend)
 import Control.Applicative
 import Control.Monad
 
@@ -120,13 +120,13 @@ instance Arbitrary TimeDiv where
 type Ticks = Int -- 0 - (2^28 - 1)
 type Time = Double
 
-type Channel = Int -- 0 - 15
-type Key = Int -- 0 - 127
-type Velocity = Int	-- 0 - 127
+type Channel = Int  -- 0 - 15
+type Key = Int      -- 0 - 127
+type Velocity = Int -- 0 - 127
 type Pressure = Int -- 0 - 127
-type Preset = Int	-- 0 - 127
+type Preset = Int   -- 0 - 127
 type Bank = Int
-type PitchWheel = Int	-- 0 - (2^14 - 1)
+type PitchWheel = Int -- 0 - (2^14 - 1)
 type Tempo = Int -- microseconds per beat  1 - (2^24 - 1)
 
 data Message =

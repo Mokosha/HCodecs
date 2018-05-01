@@ -120,6 +120,8 @@ import Data.Int
 import Data.Bits
 import Data.Maybe
 
+import System.IO.Unsafe        (unsafePerformIO)
+
 -- | The parse state
 data S = S {-# UNPACK #-} !B.ByteString  -- current chunk
            L.ByteString                  -- the rest of the input
@@ -375,7 +377,7 @@ readN n f = fmap f $ getBytes n
 getPtr :: Storable a => Int -> Parser a
 getPtr n = do
     (fp,o,_) <- readN n B.toForeignPtr
-    return . B.inlinePerformIO $ withForeignPtr fp $ \p -> peek (castPtr $ p `plusPtr` o)
+    return . unsafePerformIO $ withForeignPtr fp $ \p -> peek (castPtr $ p `plusPtr` o)
 
 ------------------------------------------------------------------------
 

@@ -29,11 +29,10 @@ import Codec.ByteString.Builder
 import Data.Word
 import Data.Int
 import qualified Data.ByteString.Lazy as L
-import Data.Monoid
+import Data.Monoid (mconcat)
 import Data.Array.Unboxed
 import Data.Array.IO
 import Data.Bits
-
 
 import Control.Monad
 import Control.Applicative
