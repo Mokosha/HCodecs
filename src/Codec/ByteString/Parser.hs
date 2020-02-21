@@ -106,13 +106,16 @@ import qualified Data.ByteString.Lazy          as L
 import qualified Data.ByteString.Internal      as B
 import qualified Data.ByteString.Lazy.Internal as L
 
+import Prelude                 hiding (fail)
+
 import Foreign.Storable        (Storable, peek, sizeOf)
 import Foreign.Ptr             (plusPtr, castPtr)
 import Foreign.ForeignPtr      (withForeignPtr)
 import Control.Monad.ST        (runST)
 import Control.Monad.ST.Unsafe (unsafeInterleaveST)
+import Control.Monad.Fail
 
-import Control.Monad
+import Control.Monad           hiding (fail)
 import Control.Applicative
 import Data.STRef
 import Data.Word
@@ -134,14 +137,12 @@ instance Functor Parser where
     fmap f m = Parser $ \s -> case unParser m s of
       Left e -> Left e
       Right (a, s') -> Right (f a, s')
-    
+
 instance Monad Parser where
     return a  = Parser (\s -> Right (a, s))
     m >>= k   = Parser $ \s -> case (unParser m) s of
       Left e -> Left e
       Right (a, s') -> (unParser (k a)) s'
-    fail  err  = Parser $ \(S _ _ bytes) ->
-        Left (err ++ ". Failed reading at byte position " ++ show bytes)
 instance MonadPlus Parser where
   mzero = Parser $ \_ -> Left []
   mplus p1 p2 = Parser $ \s -> case (unParser p1 s) of
@@ -150,10 +151,15 @@ instance MonadPlus Parser where
       ok -> ok
     ok -> ok
 
+instance MonadFail Parser where
+  fail err = Parser $ \(S _ _ bytes) ->
+    Left (err ++ ". Failed reading at byte position " ++ show bytes)
+
+
 instance Applicative Parser where
   pure  = return
   (<*>) = ap
-  
+
 instance Alternative Parser where
   empty = mzero
   (<|>) = mplus
