@@ -155,7 +155,6 @@ instance MonadFail Parser where
   fail err = Parser $ \(S _ _ bytes) ->
     Left (err ++ ". Failed reading at byte position " ++ show bytes)
 
-
 instance Applicative Parser where
   pure  = return
   (<*>) = ap
